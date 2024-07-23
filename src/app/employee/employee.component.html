@@ -1,0 +1,154 @@
+<!-- <div *ngIf="mode === 'view'" class="main">
+    <h2>Employee List</h2>
+    <button class="btn btn-primary" (click)="setMode('create')">Create Employee</button>
+    <hr>
+    <table class="table table-bordered" style="background-color: white; width: 50rem; border-radius: .5rem;">
+      <thead style="border-radius: 15rem;">
+        <tr>
+          <th scope="col">Emp Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees">
+          <td>{{ employee.id }}</td>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.email }}</td>
+          <td>
+           
+            <button class="btn btn-primary" style="font-size: small; " (click)="setMode('update', employee)">Update</button>
+          
+          
+            <button class="btn btn-primary" style="font-size: small; margin-left: .5rem; " (click)="deleteEmployee(employee.id)">Delete</button>
+         
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+
+
+  
+  <div *ngIf="mode === 'create'" class="main">
+    <h2>Create Employee</h2>
+    <form (ngSubmit)="createEmployee()">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" [(ngModel)]="employee.name" name="name" required>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" [(ngModel)]="employee.email" name="email" required>
+      </div>
+      <div>
+        <label for="phoneNumber">phoneNumber:</label>
+        <input type="text" id="phoneNumber"  [(ngModel)]="employee.phoneNumber" name="phoneNumber" required>
+      </div>
+      <div>
+        <label for="salary">Salary:</label>
+        <input type="number" id="salary"  [(ngModel)]="employee.salary" name="salary" required>
+      </div>
+      <button type="submit">Create</button>
+      <button type="button" (click)="setMode('view')">Cancel</button>
+    </form>
+  </div>
+  
+  <div *ngIf="mode === 'update'" class="main">
+    <h2>Update Employee</h2>
+    <form (ngSubmit)="updateEmployee()">
+      <div>
+        <label for="name">Name:</label>
+        <input type="text" id="name" [(ngModel)]="employee.name" name="name" required>
+      </div>
+      <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" [(ngModel)]="employee.email" name="email" required>
+      </div>
+      <button type="submit">Update</button>
+      <button type="button" (click)="setMode('view')">Cancel</button>
+    </form>
+  </div>
+   -->
+
+   <div  class="main">
+    <h2>Employee List</h2>
+    <hr>
+    <button class="btn btn-primary" (click)="setMode('create')">Create Employee</button>
+   <br>
+   <br>
+    <table class="table table-bordered" style="background-color: white; width: 50rem; border-radius: .5rem;">
+      <thead style="border-radius: 15rem;">
+        <tr>
+          <th scope="col">Emp Id</th>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Phone Number</th>
+          <th scope="col">Salary</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let employee of employees" class="tr">
+          <td>{{ employee.id }}</td>
+          <td>{{ employee.name }}</td>
+          <td>{{ employee.email }}</td>
+          <td>{{ employee.phoneNumber }}</td>
+          <td>{{ employee.salary }}</td>
+          <td>
+            <button class="btn btn-primary" style="font-size: small;" (click)="setMode('update', employee)">Update</button>
+            <button class="btn btn-primary" style="font-size: small; margin-left: .5rem;" (click)="deleteEmployee(employee.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <!-- Sidebar for Create and Update Forms -->
+  <div class="sidebar" [ngClass]="{'open': mode === 'create' || mode === 'update'}">
+    <div *ngIf="mode === 'create'">
+      <h2>Create Employee</h2>
+      <hr>
+      <form (ngSubmit)="createEmployee()">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" class="form-control" [(ngModel)]="employee.name" name="name" required>
+        </div>
+        <div class="form-group" >
+          <label for="email">Email:</label>
+          <input type="email" id="email" class="form-control" [(ngModel)]="employee.email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number:</label>
+          <input type="text" id="phoneNumber" class="form-control" [(ngModel)]="employee.phoneNumber" name="phoneNumber" required>
+        </div>
+        <div class="form-group">
+          <label for="salary">Salary:</label>
+          <input type="number" id="salary" class="form-control" [(ngModel)]="employee.salary" name="salary" required>
+        </div>
+        <button class="btn btn-primary" style="font-size: small; width: 8rem;" type="submit">Create</button>
+        <button class="btn btn-primary" style="font-size: small; width: 8rem; margin-top: 1rem;" type="button" (click)="setMode('view')">Cancel</button>
+      </form>
+    </div>
+    
+    <div *ngIf="mode === 'update'">
+      <h2>Update Employee</h2>
+      <hr>
+      <form (ngSubmit)="updateEmployee()">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" class="form-control" [(ngModel)]="employee.name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" class="form-control" [(ngModel)]="employee.email" name="email" required>
+        </div>
+        <button class="btn btn-primary" style="font-size: small; width: 8rem;" type="submit">Update</button>
+        <button class="btn btn-primary" style="font-size: small; width: 8rem; margin-top: 1rem;" type="button" (click)="setMode('view')">Cancel</button>
+      </form>
+    </div>
+  </div>
+  

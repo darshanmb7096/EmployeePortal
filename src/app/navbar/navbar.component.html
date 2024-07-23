@@ -1,0 +1,59 @@
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">EMPS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto ">
+        <li class="nav-item active">
+          <a class="nav-link text-info" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-info"  (click)="getEmployees()">Employees</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle text-info" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled text-info" href="#">Disabled</a>
+        </li>
+      </ul>
+      <form *ngIf="isLogin === true" class="form-inline my-2 my-lg-0">
+        <button  class="btn btn-outline-info my-2 my-sm-0"  type="submit" (click)="logout()">LogOut</button>
+      </form>
+
+      <form *ngIf="isLogin === false" class="form-inline my-2 my-lg-0">
+        <button   class="btn btn-outline-info my-2 my-sm-0"  type="submit" (click)="login()">Login</button>
+      </form>
+      
+      
+    </div>
+  </nav> 
+
+  -->
+
+  <div class="container">
+    
+    <nav class="side-nav">
+        <h2 class="fs-4">EMPMS</h2>
+    <hr>
+      <ul>
+        <li (click)="goToHome()" class=""><a>Home</a></li>
+        <!-- <li><a (click)="getEmployees()">Employees</a></li> -->
+        <li (click)="logout()"><a *ngIf="isLogin === true" >LogOut</a></li>
+        <li (click)="login()"><a *ngIf="isLogin === false">Login</a></li>
+      </ul>
+    </nav>
+  
+    
+  </div>
+  

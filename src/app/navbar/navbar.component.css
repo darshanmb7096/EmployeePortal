@@ -1,0 +1,47 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+  }
+  
+  .container {
+    display: flex;
+  }
+  
+  .side-nav {
+    width: 200px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    position: fixed; /* Fix the sidebar to the left */
+    top: 0;
+    left: 0;
+    height: 100vh; /* Set sidebar height to 100% of viewport height */
+  }
+  
+  .side-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .side-nav li {
+    margin-bottom: 10px;
+  }
+  
+  .side-nav a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+    padding: 10px;
+    border-radius: .5rem;
+  }
+  
+  .side-nav a:hover {
+    background-color: #117af1;
+    color: #ffffff;
+  }
+  
+  main {
+    flex: 10; /* Make main content fill the remaining space */
+    padding: 200px;
+  }
+  
