@@ -9,7 +9,7 @@ export class AuthStateService {
   
   constructor() {}
 
-  private hasToken(): boolean {
+   hasToken(): boolean {
     return typeof localStorage !== 'undefined' && !!localStorage.getItem('token');
   }
 

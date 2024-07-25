@@ -78,12 +78,29 @@
     <h2>Employee List</h2>
     <hr>
     <button class="btn btn-primary" (click)="setMode('create')">Create Employee</button>
+
+    <form [formGroup]="searchForm" style="margin-left: 25rem; margin-top: -2.3rem;">
+      <input formControlName="searchText" class="form-control" style="width: 12rem;" placeholder="Search...">
+    </form>
+
+    <div class="dropdown" style="margin-left: 39rem; margin-top: -2.3rem;">
+      <button class="btn  btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Sort By
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('','')" >None</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('ID','')" >Emp Id</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('NAME','')" >name</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('PHONE_NUMBER','')" >Phone number</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('SALARY','')" >Salary</a>
+      </div>
+    </div>
    <br>
    <br>
-    <table class="table table-bordered" style="background-color: white; width: 50rem; border-radius: .5rem;">
+    <table class="table table-bordered" style="background-color: white; width: 53rem; border-radius: .5rem;">
       <thead style="border-radius: 15rem;">
         <tr>
-          <th scope="col">Emp Id</th>
+          <th scope="col" >Emp Id</th> 
           <th scope="col">Name</th>
           <th scope="col">Email</th>
           <th scope="col">Phone Number</th>

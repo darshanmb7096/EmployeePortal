@@ -14,11 +14,13 @@ import { CommonModule } from '@angular/common';
 export class HomeComponent {
   employees: any[] = [];
   empCount :number = 0;
+  username:any='';
   constructor(private router: Router,private employeeService: EmployeeService,private cdr: ChangeDetectorRef){}
 
  
     
     ngOnInit(): void {
+      this.username = this.getUser();
       this.getEmployeeCount();
     }
       
@@ -28,9 +30,15 @@ export class HomeComponent {
    }
 
    getEmployeeCount(): void {
-    this.employeeService.getEmployees().subscribe(employees => {
+    this.employeeService.getEmployees("ID","").subscribe(employees => {
       this.empCount = employees.length;
       this.cdr.detectChanges();
     });
+  }
+  private getUser(): string | null {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem('username');
+    }
+    return null;
   }
 }

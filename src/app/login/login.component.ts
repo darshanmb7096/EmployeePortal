@@ -19,7 +19,10 @@ export class LoginComponent {
   login(): void {
     this.authService.login(this.user).subscribe(
       () => {
+        debugger
+        localStorage.setItem('username',this.user.Username);
         alert('Login Successful');
+      
         this.router.navigate(['/home']);
       },
       error => {
