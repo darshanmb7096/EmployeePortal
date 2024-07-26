@@ -23,6 +23,7 @@ export class EmployeeComponent implements OnInit {
   DefaultorderBy:string="";
   defaultSearchTeaxt:string = '';
   searchForm: FormGroup;
+  formatedJoiningDate:string='';
 
   constructor(private employeeService: EmployeeService, 
     private route: ActivatedRoute, private router: Router, 
@@ -64,6 +65,7 @@ export class EmployeeComponent implements OnInit {
   loadEmployees(orderBy:string,searchText:string): void {
     this.DefaultorderBy = orderBy;
     this.defaultSearchTeaxt = searchText;
+    
     this.employeeService.getEmployees(orderBy,searchText).subscribe(
       data => this.employees = data,
       error => console.error('Error loading employees:', error)
@@ -72,8 +74,13 @@ export class EmployeeComponent implements OnInit {
 
   setMode(mode: string, employee?: any): void {
     this.mode = mode;
+
     if (employee) {
       this.employee = { ...employee };
+      if (this.employee.joiningDate) {
+        this.employee.joiningDate = this.formatDate(this.employee.formatedJD);
+        console.log(this.employee.joiningDate);
+      }
     } else {
       this.employee = {};
     }
@@ -109,6 +116,14 @@ export class EmployeeComponent implements OnInit {
       () => this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt),
       error => console.error('Error deleting employee:', error)
     );
+  }
+
+  formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
   }
  
 }
