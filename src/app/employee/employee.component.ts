@@ -24,6 +24,10 @@ export class EmployeeComponent implements OnInit {
   defaultSearchTeaxt:string = '';
   searchForm: FormGroup;
   formatedJoiningDate:string='';
+  defaultNewHireFlg:any='';
+  heading:any='';
+  
+  
 
   constructor(private employeeService: EmployeeService, 
     private route: ActivatedRoute, private router: Router, 
@@ -36,11 +40,12 @@ export class EmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     debugger
+    this.defaultNewHireFlg = typeof localStorage !== 'undefined' && !!localStorage.getItem('getNewHiresFlg');
     this.searchForm.get('searchText')!.valueChanges.pipe(
      
       debounceTime(300), // Wait 300ms after the last keystroke before considering the value
       distinctUntilChanged(), // Only emit if value is different from previous value
-      switchMap(searchText => this.employeeService.getEmployees(this.DefaultorderBy, searchText)) // Switch to new observable with the latest search text
+      switchMap(searchText => this.employeeService.getEmployees(this.DefaultorderBy, searchText,this.defaultNewHireFlg)) // Switch to new observable with the latest search text
     ).subscribe(employees => {
       debugger
       this.employees = employees;
@@ -52,21 +57,36 @@ export class EmployeeComponent implements OnInit {
       this.router.navigate(['']);
       
     }else{
-      this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt);
+      this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg);
+      console.log(this.defaultNewHireFlg);
     }
     }
+
+
     private getToken(): string | null {
       if (typeof localStorage !== 'undefined') {
         return localStorage.getItem('token');
       }
       return null;
     }
+    private getNewHiresFlg(): string | null {
+      if (typeof localStorage !== 'undefined') {
+        return localStorage.getItem('getNewHires');
+      }
+      return null;
+    }
 
-  loadEmployees(orderBy:string,searchText:string): void {
+  loadEmployees(orderBy:string,searchText:string,getNewHires:string): void {
+    debugger
+    if (localStorage.getItem('getNewHiresFlg') === 'true') {
+      this.heading = 'New Hires';
+  } else  {
+      this.heading = 'Employee List';
+  }
     this.DefaultorderBy = orderBy;
     this.defaultSearchTeaxt = searchText;
-    
-    this.employeeService.getEmployees(orderBy,searchText).subscribe(
+    getNewHires = this.defaultNewHireFlg;
+    this.employeeService.getEmployees(orderBy,searchText,getNewHires).subscribe(
       data => this.employees = data,
       error => console.error('Error loading employees:', error)
     );
@@ -94,7 +114,7 @@ export class EmployeeComponent implements OnInit {
   createEmployee(): void {
     this.employeeService.createEmployee(this.employee).subscribe(
       () => {
-        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt);
+        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg);
         this.setMode('view');
       },
       error => console.error('Error creating employee:', error)
@@ -104,7 +124,7 @@ export class EmployeeComponent implements OnInit {
   updateEmployee(): void {
     this.employeeService.updateEmployee(this.employee.id, this.employee).subscribe(
       () => {
-        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt);
+        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg);
         this.setMode('view');
       },
       error => console.error('Error updating employee:', error)
@@ -113,9 +133,16 @@ export class EmployeeComponent implements OnInit {
 
   deleteEmployee(id: number): void {
     this.employeeService.deleteEmployee(id).subscribe(
-      () => this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt),
+      () => this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg),
       error => console.error('Error deleting employee:', error)
     );
+  }
+
+  getNewHires():void{
+    this.employeeService.getNewHires().subscribe(
+      newHires=>this.employees = newHires,
+      error => console.error('Error getting Count:', error)
+    )
   }
 
   formatDate(dateString: string): string {

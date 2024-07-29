@@ -75,7 +75,7 @@
    -->
 
    <div  class="main">
-    <h2>Employee List</h2>
+    <h2 [(ngModel)]="heading">{{heading}}</h2>
     <hr>
     <button class="btn btn-primary" (click)="setMode('create')">Create Employee</button>
 
@@ -88,11 +88,11 @@
         Sort By
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('','')" >None</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('ID','')" >Emp Id</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('NAME','')" >name</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('PHONE_NUMBER','')" >Phone number</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('SALARY','')" >Salary</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('','','')" >None</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('ID','','')" >Emp Id</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('NAME','','')" >name</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('PHONE_NUMBER','','')" >Phone number</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('SALARY','','')" >Salary</a>
       </div>
     </div>
    <br>

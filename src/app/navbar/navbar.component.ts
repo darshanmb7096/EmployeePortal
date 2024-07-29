@@ -31,8 +31,10 @@ export class NavbarComponent implements OnInit {
   }
 
   logout(): void {
+    
     this.authService.logout();
     localStorage.removeItem('username')
+    localStorage.removeItem('getNewHiresFlg');
     this.router.navigate(['']);
   }
 

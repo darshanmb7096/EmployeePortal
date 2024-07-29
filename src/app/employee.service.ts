@@ -17,16 +17,20 @@ export class EmployeeService {
     });
   }
 
-  getEmployees(orderBy: string, searchText:string): Observable<any[]> {
+  getEmployees(orderBy: string, searchText:string, getNewHires:string): Observable<any[]> {
     
-    let params = new HttpParams().set('orderBy', orderBy).set('searchText', searchText);
+    let params = new HttpParams().set('orderBy', orderBy).set('searchText', searchText).set('getNewHires', getNewHires);
 
     return this.http.get<any[]>(`${this.apiUrl}/Employee`, { headers: this.getHeaders(), params });
   }
 
+  getNewHires(): Observable<any[]>{
+    return this.http.get<any[]>(`${this.apiUrl}/NewHires`, { headers: this.getHeaders()});
+  }
+ 
   getEmployeesCount(): Observable<number> {
     return new Observable<number>(observer => {
-      this.getEmployees("","").subscribe(
+      this.getEmployees("","","").subscribe(
         employees => {
           observer.next(employees.length);
           observer.complete();
