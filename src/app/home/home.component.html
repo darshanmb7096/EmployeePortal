@@ -24,7 +24,7 @@
                 <h5 class="card-title" style="font-size: 20px; ">New Hires</h5>
               </div>
               <div class="card-body">
-                <h5 class="card-title" style="font-size: medium;" [(ngModel)]="newHireCount">Total Employees: {{newHireCount}} </h5>
+                <h5 class="card-title" style="font-size: medium;" [(ngModel)]="newHireCount">Total New Hires: {{newHireCount}} </h5>
                 <a class="btn btn-light" style="font-size: small; color: #17a2b8;" (click)="goToNewHires()">View All</a>
               </div>  
           </div>
@@ -34,8 +34,8 @@
               <h5 class="card-title" style="font-size: 20px; ">Department</h5>
             </div>
             <div class="card-body">
-              <h5 class="card-title" style="font-size: medium;" [(ngModel)]="empCount">All Departments: {{empCount}} </h5>
-              <a class="btn btn-light" style="font-size: small; color: rgb(83, 83, 8)" (click)="getEmployees()">View All</a>
+              <h5 class="card-title" style="font-size: medium;" [(ngModel)]="departmentCount">Total Departments: {{departmentCount}} </h5>
+              <a class="btn btn-light" style="font-size: small; color: rgb(83, 83, 8)" (click)="goToDepartments()">View All</a>
             </div>  
         </div>
       </div>

@@ -1,0 +1,129 @@
+<div class="main">
+    <h2>Departments</h2>
+    <hr>
+    <button class="btn btn-primary" (click)="setMode('create')">Create Department</button>
+
+    <form [formGroup]="searchForm" style="margin-left: 25rem; margin-top: -2.3rem;">
+        <input formControlName="searchText" class="form-control" style="width: 12rem;" placeholder="Search...">
+    </form>
+
+    <div class="dropdown" style="margin-left: 39rem; margin-top: -2.3rem;">
+        <button class="btn  btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false" >
+            Sort By
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('','')">None</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('','')">Dept Id</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('DEPARTMENT_NAME','')">Department Name</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('MANAGER_NAME','')">Manager Name</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('STATUS','')">Status</a>
+        </div>
+    </div>
+    <br>
+    <br>
+    <table class="table table-bordered" style="background-color: white; width: 65rem; border-radius: .5rem;">
+        <thead style="border-radius: 15rem;">
+            <tr>
+                <th scope="col">Dept Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Manager name</th>
+                <th scope="col">Created Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let department of departments" class="tr">
+                <td>{{ department.id }}</td>
+                <td>{{ department.departmentName }}</td>
+                <td>{{ department.managerName }}</td>
+                <td>{{ department.formatedCreatedDate }}</td>
+                <td>{{ department.status }}</td>
+
+                <td>
+                    <button class="btn btn-primary" style="font-size: small;"
+                        (click)="setMode('update', department)">Update</button>
+                    <button class="btn btn-primary" style="font-size: small; margin-left: .5rem;"
+                        (click)="deleteDepartment(department.id)">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Sidebar for Create and Update Forms -->
+<div class="sidebar" [ngClass]="{'open': mode === 'create' || mode === 'update'}">
+    <div *ngIf="mode === 'create'">
+        <h2>Create Department</h2>
+        <hr>
+        <form (ngSubmit)="createDepartment()">
+            <div class="form-group">
+                <label for="DepartmentName">Department Name:</label>
+                <input type="text" id="name" class="form-control" [(ngModel)]="department.departmentName"
+                    name="departmentName" required>
+            </div>
+            <div class="form-group">
+                <label for="ManagerId">Manager Name:</label>
+                <select class="custom-select" id="ManagerId" [(ngModel)]="department.managerId" name="managerId"
+                    required>
+                    <option selected disabled>Choose...</option>
+                    <option *ngFor="let employee of employees" [value]="employee.id">{{employee.name}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status">Active Status</label>
+                <select class="custom-select" id="status" [(ngModel)]="department.status" name="status" required>
+                    <option selected disabled>Choose...</option>
+                    <option *ngFor="let status of ActiveStatus ">{{status}}</option>
+                   
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="joiningDate">Date:</label>
+                <input type="date" id="joiningDate" class="form-control" [(ngModel)]="department.createdDate"
+                    name="createdDate" required>
+            </div>
+            <button class="btn btn-primary" style="font-size: small; width: 8rem;" type="submit">Create</button>
+            <button class="btn btn-primary" style="font-size: small; width: 8rem; margin-top: 1rem;" type="button"
+                (click)="setMode('view')">Cancel</button>
+        </form>
+    </div>
+
+
+
+
+<div *ngIf="mode === 'update'">
+    <h2>Update Department</h2>
+    <hr>
+    <form (ngSubmit)="updateDepartment()">
+        <div class="form-group">
+            <label for="DepartmentName">Department Name:</label>
+            <input type="text" id="name" class="form-control" [(ngModel)]="department.departmentName"
+                name="departmentName" required>
+        </div>
+        <div class="form-group">
+            <label for="ManagerId">Manager Name:</label>
+            <select class="custom-select" id="ManagerId" [(ngModel)]="department.managerId" name="managerId" required>
+                <option selected disabled>Choose...</option>
+                <option *ngFor="let employee of employees" [value]="employee.id">{{employee.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="status">Active Status</label>
+            <select class="custom-select" id="status" [(ngModel)]="department.status" name="status" required>
+                <option selected disabled>Choose...</option>
+                <option *ngFor="let status of ActiveStatus ">{{status}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="createdDate">Date:</label>
+            <input type="date" id="createdDate" class="form-control" [(ngModel)]="department.createdDate" name="createdDate" required>
+        </div>
+
+
+        <button class="btn btn-primary" style="font-size: small; width: 8rem;" type="submit">Update</button>
+        <button class="btn btn-primary" style="font-size: small; width: 8rem; margin-top: 1rem;" type="button" (click)="setMode('view')">Cancel</button>
+    </form>
+</div>
+</div>

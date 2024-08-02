@@ -1,78 +1,4 @@
-<!-- <div *ngIf="mode === 'view'" class="main">
-    <h2>Employee List</h2>
-    <button class="btn btn-primary" (click)="setMode('create')">Create Employee</button>
-    <hr>
-    <table class="table table-bordered" style="background-color: white; width: 50rem; border-radius: .5rem;">
-      <thead style="border-radius: 15rem;">
-        <tr>
-          <th scope="col">Emp Id</th>
-          <th scope="col">Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let employee of employees">
-          <td>{{ employee.id }}</td>
-          <td>{{ employee.name }}</td>
-          <td>{{ employee.email }}</td>
-          <td>
-           
-            <button class="btn btn-primary" style="font-size: small; " (click)="setMode('update', employee)">Update</button>
-          
-          
-            <button class="btn btn-primary" style="font-size: small; margin-left: .5rem; " (click)="deleteEmployee(employee.id)">Delete</button>
-         
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-  
-
-
-  
-  <div *ngIf="mode === 'create'" class="main">
-    <h2>Create Employee</h2>
-    <form (ngSubmit)="createEmployee()">
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" [(ngModel)]="employee.name" name="name" required>
-      </div>
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" [(ngModel)]="employee.email" name="email" required>
-      </div>
-      <div>
-        <label for="phoneNumber">phoneNumber:</label>
-        <input type="text" id="phoneNumber"  [(ngModel)]="employee.phoneNumber" name="phoneNumber" required>
-      </div>
-      <div>
-        <label for="salary">Salary:</label>
-        <input type="number" id="salary"  [(ngModel)]="employee.salary" name="salary" required>
-      </div>
-      <button type="submit">Create</button>
-      <button type="button" (click)="setMode('view')">Cancel</button>
-    </form>
-  </div>
-  
-  <div *ngIf="mode === 'update'" class="main">
-    <h2>Update Employee</h2>
-    <form (ngSubmit)="updateEmployee()">
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" id="name" [(ngModel)]="employee.name" name="name" required>
-      </div>
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" [(ngModel)]="employee.email" name="email" required>
-      </div>
-      <button type="submit">Update</button>
-      <button type="button" (click)="setMode('view')">Cancel</button>
-    </form>
-  </div>
-   -->
 
    <div  class="main">
     <h2 [(ngModel)]="heading">{{heading}}</h2>
@@ -88,23 +14,25 @@
         Sort By
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('','','')" >None</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('ID','','')" >Emp Id</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('NAME','','')" >name</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('PHONE_NUMBER','','')" >Phone number</a>
-        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('SALARY','','')" >Salary</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('','','',0,0)" >None</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('ID','','',0,0)" >Emp Id</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('NAME','','',0,0)" >name</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('PHONE_NUMBER','','',0,0)" >Phone number</a>
+        <a class="dropdown-item" style="cursor: pointer;" (click)="loadEmployees('SALARY','','',0,0)" >Salary</a>
       </div>
     </div>
    <br>
    <br>
-    <table class="table table-bordered" style="background-color: white; width: 65rem; border-radius: .5rem;">
-      <thead style="border-radius: 15rem;">
-        <tr>
-          <th scope="col" >Emp Id</th> 
+   <div style="overflow-y: auto; overflow-x: auto; max-height: 350px;">
+    <table class="table table-bordered" style="background-color: white; min-width: 85rem; border-radius: .5rem;">
+      <thead style="border-radius: 15rem; ">
+        <tr style="position: sticky;">
+          <th scope="col">Emp Id</th>
           <th scope="col">Name</th>
           <th scope="col">Email</th>
           <th scope="col">Phone Number</th>
           <th scope="col">Salary</th>
+          <th scope="col">Designation</th>
           <th scope="col">Joining Date</th>
           <th scope="col">Actions</th>
         </tr>
@@ -116,8 +44,9 @@
           <td>{{ employee.email }}</td>
           <td>{{ employee.phoneNumber }}</td>
           <td>{{ employee.salary }}</td>
+          <td>{{ employee.designation }}</td>
           <td>{{ employee.formatedJD }}</td>
-          <td>
+          <td >
             <button class="btn btn-primary" style="font-size: small;" (click)="setMode('update', employee)">Update</button>
             <button class="btn btn-primary" style="font-size: small; margin-left: .5rem;" (click)="deleteEmployee(employee.id)">Delete</button>
           </td>
@@ -125,9 +54,42 @@
       </tbody>
     </table>
   </div>
+
+  <div class="container">
+    <div class="page-size-limit" style="width: 6rem;">
+        <label for="pageSize">Page Size:</label>
+        <select id="pageSize" class="form-control w-auto" (change)="onPageSizeChange($event)">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+      </select>
+    </div>
+    <nav style="margin-left: 8rem; margin-top: -4rem;">
+      <ul class="pagination">
+          <li class="page-item">
+              <a class="page-link" (click)="onPageChange('previous')">Previous</a>
+          </li>
+          <li class="page-item">
+              <a class="page-link" (click)="onPageChange(1)">1</a>
+          </li>
+          <li class="page-item">
+              <a class="page-link" (click)="onPageChange(2)">2</a>
+          </li>
+          <li class="page-item">
+              <a class="page-link" (click)="onPageChange(3)">3</a>
+          </li>
+          <li class="page-item">
+              <a class="page-link" (click)="onPageChange('next')">Next</a>
+          </li>
+      </ul>
+  </nav>
+  
+</div>
+  
+  </div>
   
   <!-- Sidebar for Create and Update Forms -->
-  <div class="sidebar" [ngClass]="{'open': mode === 'create' || mode === 'update'}">
+  <div class="sidebar" [ngClass]="{'open': mode === 'create' || mode === 'update'}" style="overflow-y: auto;  max-height: 800px;">
     <div *ngIf="mode === 'create'">
       <h2>Create Employee</h2>
       <hr>
@@ -148,6 +110,16 @@
           <label for="salary">Salary:</label>
           <input type="number" id="salary" class="form-control" [(ngModel)]="employee.salary" name="salary" required>
         </div>
+        <div class="form-group">
+          <label for="designation">Designation</label>
+          <select class="custom-select" id="designation" [(ngModel)]="employee.designation" name="designation" required>
+              <option selected disabled>Choose...</option>
+              <option >Apprentice</option>
+              <option >Software Engineer trainee</option>
+              <option >Junior Software Engineer </option>
+              <option >Junior Software Engineer </option>
+          </select>
+      </div>
         <div class="form-group">
           <label for="joiningDate">joiningDate:</label>
           <input type="date" id="joiningDate" class="form-control" [(ngModel)]="employee.joiningDate" name="joiningDate" required>
@@ -175,6 +147,17 @@
           <label for="email">Email:</label>
           <input type="email" id="email" class="form-control" [(ngModel)]="employee.email" name="email" required>
         </div>
+        
+        <div class="form-group">
+          <label for="designation">Designation</label>
+          <select class="custom-select" id="designation" [(ngModel)]="employee.designation" name="designation" required>
+              <option selected disabled>Choose...</option>
+              <option >Apprentice</option>
+              <option >Software Engineer trainee</option>
+              <option >Junior Software Engineer </option>
+          </select>
+      </div>
+
         <div class="form-group">
           <label for="joiningDate">Joining Date:</label>
           <input type="date" id="joiningDate" class="form-control" [(ngModel)]="employee.joiningDate" name="joiningDate" required>

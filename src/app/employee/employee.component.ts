@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { EmployeeService } from '../employee.service';
+import { EmployeeManagementService } from '../employeeManagement.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { AuthStateService } from '../auth-state.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { ApiResponse } from '../api-response';
 
 @Component({
   selector: 'app-employee',
@@ -25,11 +26,13 @@ export class EmployeeComponent implements OnInit {
   searchForm: FormGroup;
   formatedJoiningDate:string='';
   defaultNewHireFlg:any='';
+  defaultPageSize:number = 5;
+  defaultPage:number = 1;
   heading:any='';
   
   
 
-  constructor(private employeeService: EmployeeService, 
+  constructor(private employeeManagementService : EmployeeManagementService , 
     private route: ActivatedRoute, private router: Router, 
     private sharedService:AuthStateService,private fb: FormBuilder) { 
       debugger
@@ -42,13 +45,12 @@ export class EmployeeComponent implements OnInit {
     debugger
     this.defaultNewHireFlg = typeof localStorage !== 'undefined' && !!localStorage.getItem('getNewHiresFlg');
     this.searchForm.get('searchText')!.valueChanges.pipe(
-     
       debounceTime(300), // Wait 300ms after the last keystroke before considering the value
       distinctUntilChanged(), // Only emit if value is different from previous value
-      switchMap(searchText => this.employeeService.getEmployees(this.DefaultorderBy, searchText,this.defaultNewHireFlg)) // Switch to new observable with the latest search text
-    ).subscribe(employees => {
+      switchMap(searchText => this.employeeManagementService.getEmployees(this.DefaultorderBy, searchText,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize)) // Switch to new observable with the latest search text
+    ).subscribe((response:ApiResponse) => {
       debugger
-      this.employees = employees;
+      this.employees = response.data;
       
     });
    
@@ -57,7 +59,7 @@ export class EmployeeComponent implements OnInit {
       this.router.navigate(['']);
       
     }else{
-      this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg);
+      this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize);
       console.log(this.defaultNewHireFlg);
     }
     }
@@ -76,18 +78,45 @@ export class EmployeeComponent implements OnInit {
       return null;
     }
 
-  loadEmployees(orderBy:string,searchText:string,getNewHires:string): void {
+    onPageSizeChange(event: Event): void {
+      const selectElement = event.target as HTMLSelectElement;
+      const pageSize = selectElement.value;
+      this.loadEmployees(this.DefaultorderBy, this.defaultSearchTeaxt, this.defaultNewHireFlg, this.defaultPage, +pageSize);
+    }
+
+
+    currentPage: number = 1;
+    totalPages: number = 10; 
+  
+    onPageChange(action: number | string): void {
+      if (typeof action === 'number') {
+        this.currentPage = action;
+      } else if (action === 'previous' && this.currentPage > 1) {
+        this.currentPage--;
+      } else if (action === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+      this.loadEmployees(this.DefaultorderBy, '', '', ((this.currentPage - 1) * this.defaultPageSize), this.defaultPageSize);
+    }
+    
+
+  loadEmployees(orderBy:string,searchText:string,getNewHires:string,page:number,pageSize:number): void {
     debugger
     if (localStorage.getItem('getNewHiresFlg') === 'true') {
       this.heading = 'New Hires';
-  } else  {
+       } else  {
       this.heading = 'Employee List';
-  }
+       }
+       if(pageSize === 0){
+        pageSize = this.defaultPageSize
+       }
     this.DefaultorderBy = orderBy;
     this.defaultSearchTeaxt = searchText;
+    this.defaultPage = page;
+    this.defaultPageSize = pageSize
     getNewHires = this.defaultNewHireFlg;
-    this.employeeService.getEmployees(orderBy,searchText,getNewHires).subscribe(
-      data => this.employees = data,
+    this.employeeManagementService.getEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize).subscribe(
+      (response:ApiResponse)=> this.employees = response.data,
       error => console.error('Error loading employees:', error)
     );
   }
@@ -112,9 +141,9 @@ export class EmployeeComponent implements OnInit {
   }
 
   createEmployee(): void {
-    this.employeeService.createEmployee(this.employee).subscribe(
+    this.employeeManagementService.createEmployee(this.employee).subscribe(
       () => {
-        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg);
+        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize);
         this.setMode('view');
       },
       error => console.error('Error creating employee:', error)
@@ -122,9 +151,9 @@ export class EmployeeComponent implements OnInit {
   }
 
   updateEmployee(): void {
-    this.employeeService.updateEmployee(this.employee.id, this.employee).subscribe(
+    this.employeeManagementService.updateEmployee(this.employee.id, this.employee).subscribe(
       () => {
-        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg);
+        this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize);
         this.setMode('view');
       },
       error => console.error('Error updating employee:', error)
@@ -132,15 +161,15 @@ export class EmployeeComponent implements OnInit {
   }
 
   deleteEmployee(id: number): void {
-    this.employeeService.deleteEmployee(id).subscribe(
-      () => this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg),
+    this.employeeManagementService.deleteEmployee(id).subscribe(
+      () => this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize),
       error => console.error('Error deleting employee:', error)
     );
   }
 
   getNewHires():void{
-    this.employeeService.getNewHires().subscribe(
-      newHires=>this.employees = newHires,
+    this.employeeManagementService.getNewHires().subscribe(
+      (response:ApiResponse)=>this.employees = response.data,
       error => console.error('Error getting Count:', error)
     )
   }
