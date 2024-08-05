@@ -33,6 +33,7 @@
           <th scope="col">Phone Number</th>
           <th scope="col">Salary</th>
           <th scope="col">Designation</th>
+          <th scope="col">Department Name</th>
           <th scope="col">Joining Date</th>
           <th scope="col">Actions</th>
         </tr>
@@ -45,6 +46,7 @@
           <td>{{ employee.phoneNumber }}</td>
           <td>{{ employee.salary }}</td>
           <td>{{ employee.designation }}</td>
+          <td>{{ employee.departmentName }}</td>
           <td>{{ employee.formatedJD }}</td>
           <td >
             <button class="btn btn-primary" style="font-size: small;" (click)="setMode('update', employee)">Update</button>
@@ -117,9 +119,16 @@
               <option >Apprentice</option>
               <option >Software Engineer trainee</option>
               <option >Junior Software Engineer </option>
-              <option >Junior Software Engineer </option>
           </select>
       </div>
+      <div class="form-group">
+        <label for="ManagerId">Department Name:</label>
+        <select class="custom-select" id="ManagerId" [(ngModel)]="employee.departmentId" name="managerId"
+            required>
+            <option selected disabled>Choose...</option>
+            <option *ngFor="let department of departments" [value]="department.id">{{department.departmentName}}</option>
+        </select>
+    </div>
         <div class="form-group">
           <label for="joiningDate">joiningDate:</label>
           <input type="date" id="joiningDate" class="form-control" [(ngModel)]="employee.joiningDate" name="joiningDate" required>
@@ -157,6 +166,15 @@
               <option >Junior Software Engineer </option>
           </select>
       </div>
+
+      <div class="form-group">
+        <label for="departmentId">Department Name:</label>
+        <select class="custom-select" id="departmentId" [(ngModel)]="employee.departmentId" name="departmentId"
+            required>
+            <option selected disabled>Choose...</option>
+            <option *ngFor="let department of departments" [value]="department.id">{{department.departmentName}}</option>
+        </select>
+    </div>
 
         <div class="form-group">
           <label for="joiningDate">Joining Date:</label>

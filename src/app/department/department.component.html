@@ -13,15 +13,16 @@
             Sort By
         </button>
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('','')">None</a>
-            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('','')">Dept Id</a>
-            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('DEPARTMENT_NAME','')">Department Name</a>
-            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('MANAGER_NAME','')">Manager Name</a>
-            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('STATUS','')">Status</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('','',0,0)">None</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('ID','',0,0)">Dept Id</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('DEPARTMENT_NAME','',0,0)">Department Name</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('MANAGER_NAME','',0,0)">Manager Name</a>
+            <a class="dropdown-item" style="cursor: pointer;" (click)="loadDepartments('STATUS','',0,0)">Status</a>
         </div>
     </div>
     <br>
     <br>
+    <div style="overflow-y: auto; overflow-x: auto; max-height: 350px;">
     <table class="table table-bordered" style="background-color: white; width: 65rem; border-radius: .5rem;">
         <thead style="border-radius: 15rem;">
             <tr>
@@ -50,6 +51,37 @@
             </tr>
         </tbody>
     </table>
+    </div>
+    <div class="container">
+        <div class="page-size-limit" style="width: 6rem;">
+            <label for="pageSize">Page Size:</label>
+            <select id="pageSize" class="form-control w-auto" (change)="onPageSizeChange($event)">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+          </select>
+        </div>
+        <nav style="margin-left: 8rem; margin-top: -4rem;">
+          <ul class="pagination">
+              <li class="page-item">
+                  <a class="page-link" (click)="onPageChange('previous')">Previous</a>
+              </li>
+              <li class="page-item">
+                  <a class="page-link" (click)="onPageChange(1)">1</a>
+              </li>
+              <li class="page-item">
+                  <a class="page-link" (click)="onPageChange(2)">2</a>
+              </li>
+              <li class="page-item">
+                  <a class="page-link" (click)="onPageChange(3)">3</a>
+              </li>
+              <li class="page-item">
+                  <a class="page-link" (click)="onPageChange('next')">Next</a>
+              </li>
+          </ul>
+      </nav>
+      
+    </div>
 </div>
 
 <!-- Sidebar for Create and Update Forms -->

@@ -25,8 +25,8 @@ export class EmployeeManagementService {
     return this.http.get<ApiResponse>(`${this.EmpApiUrl}/Employee`, { headers: this.getHeaders(), params });
   }
 
-  getDepartments(orderBy:string,searchText:string):Observable<ApiResponse>{
-    let params = new HttpParams().set('orderBy', orderBy).set('searchText', searchText)
+  getDepartments(orderBy:string,searchText:string,page:number,pageSize:number):Observable<ApiResponse>{
+    let params = new HttpParams().set('orderBy', orderBy).set('searchText', searchText).set('page', page).set('pageSize',pageSize);
     return this.http.get<ApiResponse>(`${this.deptApiUrl}/Departments`, { headers: this.getHeaders(),params });
   }
 

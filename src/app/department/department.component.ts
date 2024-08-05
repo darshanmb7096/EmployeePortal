@@ -32,6 +32,8 @@ export class DepartmentComponent implements OnInit {
   mode: string = 'view'; // view, create, update
   searchForm: FormGroup;
   selectedEmployeeId: number = 0;
+  defaultPageSize:number = 5;
+  defaultPage:number = 1;
 
   constructor(
     private employeeManagementService: EmployeeManagementService,
@@ -49,13 +51,13 @@ export class DepartmentComponent implements OnInit {
     this.searchForm.get('searchText')!.valueChanges.pipe(
       debounceTime(300), // Wait 300ms after the last keystroke before considering the value
       distinctUntilChanged(), // Only emit if value is different from previous value
-      switchMap(searchText => this.employeeManagementService.getDepartments(this.defaultOrderBy, searchText)) // Switch to new observable with the latest search text
+      switchMap(searchText => this.employeeManagementService.getDepartments(this.defaultOrderBy, searchText,this.defaultPage,this.defaultPageSize)) // Switch to new observable with the latest search text
     ).subscribe((response:ApiResponse) => {
       debugger
       this.departments = response.data;
       
     });
-    this.loadDepartments(this.defaultOrderBy,this.defaultSearchText)
+    this.loadDepartments(this.defaultOrderBy,this.defaultSearchText,this.defaultPage,this.defaultPageSize)
     this.loadEmployees('Id', '', 'false',0,0);
   }
 
@@ -66,10 +68,15 @@ export class DepartmentComponent implements OnInit {
   //   );
   // }
 
-  loadDepartments(orderBy:string,searchText:string): void {
+  loadDepartments(orderBy:string,searchText:string,page:number,pageSize:number): void {
+    if(pageSize === 0){
+      pageSize = this.defaultPageSize
+     }
     this.defaultOrderBy = orderBy;
     this.defaultSearchText = searchText;
-    this.employeeManagementService.getDepartments(this.defaultOrderBy,this.defaultSearchText).subscribe(
+    this.defaultPage = page;
+    this.defaultPageSize = pageSize
+    this.employeeManagementService.getDepartments(this.defaultOrderBy,this.defaultSearchText,this.defaultPage,this.defaultPageSize).subscribe(
       (response: ApiResponse) => {
         if (response.status) {
           this.departments = response.data;
@@ -81,12 +88,31 @@ export class DepartmentComponent implements OnInit {
       error => console.error('Error Loading Departments', error)
     );
   }
+   onPageSizeChange(event: Event): void {
+      const selectElement = event.target as HTMLSelectElement;
+      const pageSize = selectElement.value;
+      this.loadDepartments(this.defaultOrderBy, this.defaultSearchText, this.defaultPage, +pageSize);
+    }
+
+  currentPage: number = 1;
+    totalPages: number = 10; 
+  
+    onPageChange(action: number | string): void {
+      if (typeof action === 'number') {
+        this.currentPage = action;
+      } else if (action === 'previous' && this.currentPage > 1) {
+        this.currentPage--;
+      } else if (action === 'next' && this.currentPage < this.totalPages) {
+        this.currentPage++;
+      }
+      this.loadDepartments(this.defaultOrderBy, '', this.currentPage, this.defaultPageSize);
+    }
 
 
 
 
   loadEmployees(orderBy: string, searchText: string, getNewHires: string,page:number,pageSize:number): void {
-    this.employeeManagementService.getEmployees(orderBy, searchText, getNewHires,page,pageSize).subscribe(
+    this.employeeManagementService.getEmployees(orderBy, searchText, getNewHires,page,10).subscribe(
       (response:ApiResponse) => this.employees = response.data,
       error => console.error('Error loading employees:', error)
     );
@@ -112,7 +138,7 @@ export class DepartmentComponent implements OnInit {
     }else{ this.department.status = 'false';}
     console.log('Payload being sent:', this.department); // Debug line
     this.employeeManagementService.createDepartment(this.department).subscribe(() => {
-      this.loadDepartments(this.defaultOrderBy,this.defaultSearchText);
+      this.loadDepartments(this.defaultOrderBy,this.defaultSearchText,this.defaultPage,this.defaultPageSize);
       this.setMode('view');
     },
     error => console.error('Error creating department:', error)
@@ -126,7 +152,7 @@ export class DepartmentComponent implements OnInit {
     else{this.department.status = 'false';}
     console.log('Payload being sent:', this.department); // Debug line
     this.employeeManagementService.updateDepartment(this.department.id,this.department).subscribe(()=>{
-      this.loadDepartments(this.defaultOrderBy,this.defaultSearchText);
+      this.loadDepartments(this.defaultOrderBy,this.defaultSearchText,this.defaultPage,this.defaultPageSize);
       this.setMode('view');
     },
    error => console.error('Error updating department:', error))
@@ -134,7 +160,7 @@ export class DepartmentComponent implements OnInit {
 
   deleteDepartment(id: number): void {
     this.employeeManagementService.deleteDepartment(id).subscribe(()=>{
-      this.loadDepartments(this.defaultOrderBy,this.defaultSearchText);
+      this.loadDepartments(this.defaultOrderBy,this.defaultSearchText,this.defaultPage,this.defaultPageSize);
       
     
     })

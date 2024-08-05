@@ -65,14 +65,14 @@ export class HomeComponent {
     });
   }
     getNewHires():void {
-         this.employeeManagementService.getNewHires().subscribe((response:ApiResponse)=>{ 
-      this.newHireCount = response.data.length;
-      this.cdr.detectChanges();
-    });
+      this.employeeManagementService.getEmployees("ID","","",0,0).subscribe((response:ApiResponse) => {
+        this.newHireCount = response.data.length;
+        this.cdr.detectChanges();
+      });
   }
    getDepartments():void{
     debugger
-    this.employeeManagementService.getDepartments('','').subscribe((response: ApiResponse) => {
+    this.employeeManagementService.getDepartments('','',0,0).subscribe((response: ApiResponse) => {
       this.departmentCount = response.data.length;
       this.cdr.detectChanges();
     });

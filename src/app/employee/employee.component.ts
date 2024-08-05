@@ -17,6 +17,8 @@ import { ApiResponse } from '../api-response';
 })
 export class EmployeeComponent implements OnInit {
   employees: any[] = [];
+  departments : any[] = [];
+  department :any = {};
   employee: any = {};
   mode: string = 'view'; // view, create, update
   count: number = 0;
@@ -43,6 +45,7 @@ export class EmployeeComponent implements OnInit {
 
   ngOnInit(): void {
     debugger
+    this.loadDepartments('','',0,100);
     this.defaultNewHireFlg = typeof localStorage !== 'undefined' && !!localStorage.getItem('getNewHiresFlg');
     this.searchForm.get('searchText')!.valueChanges.pipe(
       debounceTime(300), // Wait 300ms after the last keystroke before considering the value
@@ -63,6 +66,14 @@ export class EmployeeComponent implements OnInit {
       console.log(this.defaultNewHireFlg);
     }
     }
+
+    
+  loadDepartments(orderBy: string, searchText: string, page:number,pageSize:number): void {
+    this.employeeManagementService.getDepartments(orderBy, searchText,page,100).subscribe(
+      (response:ApiResponse) => this.departments = response.data,
+      error => console.error('Error loading employees:', error)
+    );
+  }
 
 
     private getToken(): string | null {
@@ -96,7 +107,7 @@ export class EmployeeComponent implements OnInit {
       } else if (action === 'next' && this.currentPage < this.totalPages) {
         this.currentPage++;
       }
-      this.loadEmployees(this.DefaultorderBy, '', '', ((this.currentPage - 1) * this.defaultPageSize), this.defaultPageSize);
+      this.loadEmployees(this.DefaultorderBy, '', '', this.currentPage, this.defaultPageSize);
     }
     
 
@@ -151,6 +162,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   updateEmployee(): void {
+    debugger
     this.employeeManagementService.updateEmployee(this.employee.id, this.employee).subscribe(
       () => {
         this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize);

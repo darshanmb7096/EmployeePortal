@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthStateService } from './auth-state.service';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,23 @@ import { AuthStateService } from './auth-state.service';
 export class AuthService {
   private apiUrl = 'https://localhost:7198/api/Login';
 
-  constructor(private http: HttpClient, private router: Router, private authStateService: AuthStateService) { }
+  constructor(private http: HttpClient, 
+    private router: Router, private authStateService: AuthStateService,private tokenService: TokenService) {
+      //this.checkTokenExpiry();
+     }
+
+
+    private checkTokenExpiry(): void {
+      const token = this.tokenService.getToken();
+      if (token && this.tokenService.isTokenExpired(token)) {
+        this.logout();
+      } else {
+        setTimeout(() => {
+          this.checkTokenExpiry();
+        }, 1000 * 60); // check every minute
+      }
+    }
+  
 
   login(user: any): Observable<any> {
     const headers = new HttpHeaders().set('EmpApiKey', 'Emp101@Imf');
@@ -19,6 +36,7 @@ export class AuthService {
         if (response.token) {
           this.setToken(response.token);
           this.authStateService.login();
+          //this.checkTokenExpiry();
         }
       })
     );
@@ -27,7 +45,7 @@ export class AuthService {
   logout(): void {
     this.removeToken();
     this.authStateService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   }
 
   private setToken(token: string): void {
@@ -50,6 +68,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return this.getToken() !== null;
+    const token = this.tokenService.getToken();
+    return this.getToken() !== null ;
   }
 }
