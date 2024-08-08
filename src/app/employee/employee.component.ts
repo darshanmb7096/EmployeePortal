@@ -97,7 +97,7 @@ export class EmployeeComponent implements OnInit {
 
 
     currentPage: number = 1;
-    totalPages: number = 10; 
+    totalPages: number = 100; 
   
     onPageChange(action: number | string): void {
       if (typeof action === 'number') {

@@ -59,7 +59,7 @@ export class HomeComponent {
    }
 
    getEmployeeCount(): void {
-    this.employeeManagementService.getEmployees("ID","","false",0,0).subscribe((response:ApiResponse) => {
+    this.employeeManagementService.getEmployees("ID","","false",0,100).subscribe((response:ApiResponse) => {
       this.empCount = response.data.length;
       this.cdr.detectChanges();
     });
@@ -72,7 +72,7 @@ export class HomeComponent {
   }
    getDepartments():void{
     debugger
-    this.employeeManagementService.getDepartments('','',0,0).subscribe((response: ApiResponse) => {
+    this.employeeManagementService.getDepartments('','',0,100).subscribe((response: ApiResponse) => {
       this.departmentCount = response.data.length;
       this.cdr.detectChanges();
     });
