@@ -44,10 +44,10 @@
   <div class="container">
     
     <nav class="side-nav">
-        <img src="/employee-management//src/assets/logo.png">
+        <h2 class="fs-4" style="font-family: 'Courier New', Courier, monospace;font-weight: bold;">EMPMS</h2>
     <hr>
       <ul>
-        <li (click)="goToHome()" class=""><a>Home</a></li>
+        <li (click)="goToHome()" class="" ><a>Home</a></li>
         <li (click)="goToDashBoard()"><a >DashBoard</a></li>
         <li (click)="logout()"><a *ngIf="isLogin === true" >LogOut</a></li>
         <li (click)="login()"><a *ngIf="isLogin === false">Login</a></li>

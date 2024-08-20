@@ -39,6 +39,7 @@
         </tr>
       </thead>
       <tbody>
+        
         <tr *ngFor="let employee of employees" class="tr">
           <td>{{ employee.id }}</td>
           <td>{{ employee.name }}</td>
@@ -50,11 +51,15 @@
           <td>{{ employee.formatedJD }}</td>
           <td >
             <button class="btn btn-primary" style="font-size: small;" (click)="setMode('update', employee)">Update</button>
-            <button class="btn btn-primary" style="font-size: small; margin-left: .5rem;" (click)="deleteEmployee(employee.id)">Delete</button>
+            <button class="btn btn-danger" style="font-size: small; margin-left: .5rem;" (click)="deleteEmployee(employee.id)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <h2 *ngIf="heading==='Employee List'&&employees.length===0" style="font-weight:bold lighter;font-size: large; text-align: center;"
+    >No Data Found.</h2>
+    <h2 *ngIf="heading==='New Hires'&&employees.length===0" style="font-weight:bold lighter;font-size: large; text-align: center;"
+    >Employees hired in last 5 days will appear here.</h2>
   </div>
 
   <div class="container">
