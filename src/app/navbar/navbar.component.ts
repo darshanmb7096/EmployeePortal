@@ -27,7 +27,7 @@ export class NavbarComponent implements OnInit {
   }
 
   login(): void {
-    this.router.navigate(['']);
+    this.router.navigate(['login']);
   }
 
   logout(): void {
@@ -35,7 +35,7 @@ export class NavbarComponent implements OnInit {
     this.authService.logout();
     localStorage.removeItem('username')
     localStorage.removeItem('getNewHiresFlg');
-    this.router.navigate(['']);
+    this.router.navigate(['login']);
   }
 
   getEmployees(): void {
@@ -48,8 +48,14 @@ export class NavbarComponent implements OnInit {
   }
 
   goToHome(): void {
+    
+      this.router.navigate(['']);
+   
+  }
+
+  goToDashBoard(): void {
     if (this.isLogin) {
-      this.router.navigate(['home']);
+      this.router.navigate(['dashBoard']);
     } else {
       alert("Please login")
       this.router.navigate(['login']);

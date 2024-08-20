@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
    ngOnInit(): void {
      if(localStorage.getItem('token')!=null){
       alert("Already Logged in")
-      this.router.navigate(['/home']);
+      this.router.navigate(['/dashBoard']);
      }
    }
 
@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('username',this.user.Username);
         alert('Login Successful');
       
-        this.router.navigate(['/home']);
+        this.router.navigate(['/dashBoard']);
       },
       error => {
         console.error('Login error:', error);

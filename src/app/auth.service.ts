@@ -45,7 +45,7 @@ export class AuthService {
   logout(): void {
     this.removeToken();
     this.authStateService.logout();
-    this.router.navigate(['']);
+    this.router.navigate(['login']);
   }
 
   private setToken(token: string): void {

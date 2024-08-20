@@ -34,6 +34,10 @@ export class EmployeeManagementService {
   getNewHires(): Observable<ApiResponse>{
     return this.http.get<ApiResponse>(`${this.EmpApiUrl}/NewHires`, { headers: this.getHeaders()});
   }
+
+  getImages(): Observable<ApiResponse>{
+    return this.http.get<ApiResponse>(`http://localhost:62801/api/ExitApproval/ReadyForExit`);
+  }
  
   // getEmployeesCount(): Observable<number> {
   //   return new Observable<number>(observer => {

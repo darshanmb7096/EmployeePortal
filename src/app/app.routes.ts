@@ -7,9 +7,9 @@ import { DepartmentComponent } from './department/department.component';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 
 export const routes: Routes = [
-    { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
-  { path: '', component: LoginComponent },
+    { path: 'dashBoard', component: HomeComponent,canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
   { path: 'employees', component: EmployeeComponent, canActivate: [AuthGuard] },
   {path:'department',component:DepartmentComponent,canActivate: [AuthGuard]},
-  { path: 'lp', component: LandingPageComponent },
+  { path: '', component: LandingPageComponent },
 ];

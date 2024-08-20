@@ -59,7 +59,7 @@ export class EmployeeComponent implements OnInit {
    
     if(this.getToken==null){
       alert("Please Login")
-      this.router.navigate(['']);
+      this.router.navigate(['login']);
       
     }else{
       this.loadEmployees(this.DefaultorderBy,this.defaultSearchTeaxt,this.defaultNewHireFlg,this.defaultPage,this.defaultPageSize);
@@ -148,7 +148,7 @@ export class EmployeeComponent implements OnInit {
 
   logout(): void {
     localStorage.removeItem('token');
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 
   createEmployee(): void {
